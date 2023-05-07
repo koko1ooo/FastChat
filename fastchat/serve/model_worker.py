@@ -65,6 +65,7 @@ class ModelWorker:
         device,
         num_gpus,
         max_gpu_memory,
+        offload_folder,
         load_8bit=False,
         cpu_offloading=False,
     ):
@@ -78,7 +79,7 @@ class ModelWorker:
 
         logger.info(f"Loading the model {self.model_name} on worker {worker_id} ...")
         self.model, self.tokenizer = load_model(
-            model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading
+            model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, offload_folder
         )
 
         if hasattr(self.model.config, "max_sequence_length"):
@@ -317,6 +318,7 @@ if __name__ == "__main__":
     parser.add_argument("--limit-model-concurrency", type=int, default=5)
     parser.add_argument("--stream-interval", type=int, default=2)
     parser.add_argument("--no-register", action="store_true")
+    parser.add_argument("--offload_folder", type=str, help="Optional diskcache directory")
     args = parser.parse_args()
     logger.info(f"args: {args}")
 
@@ -339,5 +341,6 @@ if __name__ == "__main__":
         args.max_gpu_memory,
         args.load_8bit,
         args.cpu_offloading,
+        args.offload_folder,
     )
     uvicorn.run(app, host=args.host, port=args.port, log_level="info")

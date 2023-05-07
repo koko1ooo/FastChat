@@ -79,7 +79,7 @@ def raise_warning_for_old_weights(model_path, model):
             )
 
 def load_model(
-    model_path, device, num_gpus, max_gpu_memory=None, load_8bit=False, cpu_offloading=False, debug=False
+    model_path, device, num_gpus, max_gpu_memory=None, load_8bit=False, cpu_offloading=False, debug=False, offload_folder=None
 ):
     cpu_offloading = raise_warning_for_incompatible_cpu_offloading_configuration(device, load_8bit, cpu_offloading)
     if device == "cpu":
@@ -114,6 +114,7 @@ def load_model(
             kwargs["max_memory"]["cpu"] = str(math.floor(psutil.virtual_memory().available / 2**20)) + 'Mib'
         kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit_fp32_cpu_offload=cpu_offloading)
         kwargs["load_in_8bit"] = load_8bit
+        kwargs["offload_folder"] = offload_folder
     elif load_8bit:
         if num_gpus != 1:
             warnings.warn("8-bit quantization is not supported for multi-gpu inference.")
