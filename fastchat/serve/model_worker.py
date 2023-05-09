@@ -330,6 +330,7 @@ if __name__ == "__main__":
             )
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
 
+    print(args.offload_folder)
     worker = ModelWorker(
         args.controller_address,
         args.worker_address,
