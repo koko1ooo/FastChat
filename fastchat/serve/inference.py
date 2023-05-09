@@ -153,6 +153,7 @@ def load_model(
     else:
         if offload_folder is not None:
             tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
+            print(offload_folder)
             model = AutoModelForCausalLM.from_pretrained(
                 model_path, low_cpu_mem_usage=True, offload_folder=offload_folder, **kwargs
             )
