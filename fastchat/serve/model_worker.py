@@ -341,8 +341,9 @@ if __name__ == "__main__":
         args.device,
         args.num_gpus,
         args.max_gpu_memory,
+        args.offload_folder,
         args.load_8bit,
         args.cpu_offloading,
-        args.offload_folder,
+        
     )
     uvicorn.run(app, host=args.host, port=args.port, log_level="info")
