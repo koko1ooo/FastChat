@@ -302,10 +302,11 @@ def chat_loop(
     max_new_tokens: int,
     chatio: ChatIO,
     debug: bool,
+    offload_folder: str,
 ):
     # Model
     model, tokenizer = load_model(
-        model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, debug
+        model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, debug, offload_folder=offload_folder
     )
     is_chatglm = "chatglm" in str(type(model)).lower()
 

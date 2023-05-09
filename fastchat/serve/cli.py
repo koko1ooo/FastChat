@@ -126,6 +126,7 @@ def main(args):
             args.max_new_tokens,
             chatio,
             args.debug,
+            args.offload_folder
         )
     except KeyboardInterrupt:
         print("exit...")
@@ -147,5 +148,6 @@ if __name__ == "__main__":
         help="Display style.",
     )
     parser.add_argument("--debug", action="store_true", help="Print debug information")
+    parser.add_argument("--offload_folder", type=str, help="Optional diskcache directory")
     args = parser.parse_args()
     main(args)
