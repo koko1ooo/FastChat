@@ -151,7 +151,7 @@ def load_model(
         model = LlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
         tokenizer = LlamaTokenizer.from_pretrained(model_path)
     else:
-        if offload_folder != None:
+        if offload_folder is not None:
             tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
             model = AutoModelForCausalLM.from_pretrained(
                 model_path, low_cpu_mem_usage=True, offload_folder=offload_folder, **kwargs
