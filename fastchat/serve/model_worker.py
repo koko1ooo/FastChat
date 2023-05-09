@@ -79,7 +79,7 @@ class ModelWorker:
 
         logger.info(f"Loading the model {self.model_name} on worker {worker_id} ...")
         self.model, self.tokenizer = load_model(
-            model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, offload_folder
+            model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, offload_folder="/mnt/c/work_temp/"
         )
 
         if hasattr(self.model.config, "max_sequence_length"):
