@@ -78,6 +78,7 @@ class ModelWorker:
         self.device = device
 
         logger.info(f"Loading the model {self.model_name} on worker {worker_id} ...")
+        print(offload_folder)
         self.model, self.tokenizer = load_model(
             model_path, device, num_gpus, max_gpu_memory, load_8bit, cpu_offloading, offload_folder=offload_folder
         )
