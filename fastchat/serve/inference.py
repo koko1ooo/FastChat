@@ -114,7 +114,6 @@ def load_model(
             kwargs["max_memory"]["cpu"] = str(math.floor(psutil.virtual_memory().available / 2**20)) + 'Mib'
         kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit_fp32_cpu_offload=cpu_offloading)
         kwargs["load_in_8bit"] = load_8bit
-        kwargs["offload_folder"] = offload_folder
     elif load_8bit:
         if num_gpus != 1:
             warnings.warn("8-bit quantization is not supported for multi-gpu inference.")
@@ -152,11 +151,19 @@ def load_model(
         model = LlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
         tokenizer = LlamaTokenizer.from_pretrained(model_path)
     else:
-        tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-        model = AutoModelForCausalLM.from_pretrained(
-            model_path, low_cpu_mem_usage=True, **kwargs
-        )
-        raise_warning_for_old_weights(model_path, model)
+        if offload_folder != None:
+            tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
+            model = AutoModelForCausalLM.from_pretrained(
+                model_path, low_cpu_mem_usage=True, offload_folder=offload_folder, **kwargs
+            )
+            raise_warning_for_old_weights(model_path, model)
+            
+        else:
+            tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
+            model = AutoModelForCausalLM.from_pretrained(
+                model_path, low_cpu_mem_usage=True, **kwargs
+            )
+            raise_warning_for_old_weights(model_path, model)
 
     if (device == "cuda" and num_gpus == 1 and not cpu_offloading) or device == "mps":
         model.to(device)
